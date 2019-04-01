@@ -20,31 +20,38 @@ import com.google.android.libraries.places.api.model.TypeFilter;
 import com.google.android.libraries.places.api.net.FindAutocompletePredictionsRequest;
 import com.google.android.libraries.places.api.net.PlacesClient;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
-    private String apiKey ="AIzaSyC6QUQSzSFDaKwKCj5IjY3lwuu6AIK8V2g";
+    private String apiKey ="AIzaSyB6_TfYv6WT-sdlBmxmMQAhJV81VWfuqcQ";
     private EditText editText;
     private PlacesClient placesClient;
-    private List<AutocompletePrediction> resultsList;
+
     private RecyclerView recyclerView;
-    private SearchAdapter searchAdapter;
+    private PlaceAdapter placeAdapter;
     private LinearLayoutManager layoutManager;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         editText = findViewById(R.id.cityname);
+
         recyclerView = findViewById(R.id.rv1);
         recyclerView.setHasFixedSize(true);
         layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
         if(!Places.isInitialized()){
             Places.initialize(getApplicationContext(),apiKey);
+            Log.d("INITIALIZED","JGFKJDSFKDSHFDH");
         }
         else{
             Log.d("on else","already initialized");
         }
+        RectangularBounds bounds = RectangularBounds.newInstance(
+                new LatLng(-33.880490, 151.184363),
+                new LatLng(-33.858754, 151.229596));
+        placeAdapter = new PlaceAdapter(bounds,MainActivity.this);
         PlacesClient placesClient = Places.createClient(this);
         this.placesClient = placesClient;
         editText.addTextChangedListener(new TextWatcher() {
@@ -55,9 +62,12 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                    getCities(s.toString());
-                    searchAdapter = new SearchAdapter(resultsList,MainActivity.this);
-                    recyclerView.setAdapter(searchAdapter);
+
+
+               placeAdapter.getPredictions(s);
+                Log.d("ONTEXTCHANGED","JGFKJDSFKDSHFDH");
+                recyclerView.setAdapter(placeAdapter);
+                Log.d("AFTERSETADPTR","JGFKJDSFKDSHFDH");
             }
 
             @Override
@@ -65,32 +75,7 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+
     }
-    public List<AutocompletePrediction> getCities(String query){
-        AutocompleteSessionToken token = AutocompleteSessionToken.newInstance();
-        RectangularBounds bounds = RectangularBounds.newInstance(
-                new LatLng(-33.880490, 151.184363),
-                new LatLng(-33.858754, 151.229596));
-        FindAutocompletePredictionsRequest request = FindAutocompletePredictionsRequest.builder()
-                .setLocationBias(bounds)
-                //.setLocationRestriction(bounds)
-                .setCountry("au")
-                .setTypeFilter(TypeFilter.CITIES)
-                .setSessionToken(token)
-                .setQuery(query)
-                .build();
-        placesClient.findAutocompletePredictions(request).addOnSuccessListener((response) -> {
-            resultsList=response.getAutocompletePredictions();
-            for (AutocompletePrediction prediction : response.getAutocompletePredictions()) {
-               Log.d("Check", prediction.getPlaceId());
-                Log.i("He", prediction.getPrimaryText(null).toString());
-            }
-        }).addOnFailureListener((exception) -> {
-            if (exception instanceof ApiException) {
-                ApiException apiException = (ApiException) exception;
-                Log.e("Hey", "Place not found: " + apiException.getStatusCode());
-            }
-        });
-        return  resultsList;
-    }
+
 }
