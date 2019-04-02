@@ -14,19 +14,21 @@
     android:textSize="20dp"
     android:textColor="@color/places_text_black_alpha_26"
     android:layout_marginLeft="125dp"/>
+
   <EditText
+      android:id="@+id/cityname"
       android:layout_width="300dp"
       android:layout_height="45dp"
-      android:id="@+id/cityname"
-      android:layout_marginTop="40dp"
       android:layout_marginLeft="40dp"
+      android:layout_marginTop="40dp"
       android:layout_marginRight="5dp"
-      android:hint="Type city name"
-      android:paddingLeft="20dp"
-      android:textColorHint="@color/quantum_bluegrey500"
       android:background="@drawable/rounded_edit_text"
       android:drawableLeft="@drawable/search2"
-      android:textColor="@color/quantum_bluegrey950"/>
+      android:fontFamily="sans-serif-condensed-medium"
+      android:hint="Type city name"
+      android:paddingLeft="20dp"
+      android:textColor="@color/quantum_bluegrey950"
+      android:textColorHint="@color/quantum_bluegrey500" />
   <android.support.v7.widget.RecyclerView
       android:layout_width="300dp"
       android:layout_height="250dp"

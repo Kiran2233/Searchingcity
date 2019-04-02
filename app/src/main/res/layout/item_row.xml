@@ -7,10 +7,11 @@
         android:id="@+id/address"
         android:layout_width="match_parent"
         android:layout_height="30dp"
-        android:layout_marginTop="5dp"
-        android:textColor="#000"
-        android:textSize="15sp"
         android:layout_marginLeft="20dp"
+        android:layout_marginTop="5dp"
         android:layout_marginRight="20dp"
-        />
+        android:drawableLeft="@drawable/iconsloc"
+        android:fontFamily="sans-serif-condensed-medium"
+        android:textColor="#000"
+        android:textSize="15sp" />
 </RelativeLayout>
