@@ -4,20 +4,34 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
-
+    tools:context=".MainActivity"
+    android:background="#ADD8E6">
+<TextView
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="Select Location"
+    android:textStyle="bold"
+    android:textSize="20dp"
+    android:textColor="@color/places_text_black_alpha_26"
+    android:layout_marginLeft="125dp"/>
   <EditText
-      android:layout_width="match_parent"
-      android:layout_height="55dp"
+      android:layout_width="300dp"
+      android:layout_height="45dp"
       android:id="@+id/cityname"
-      android:layout_marginTop="4dp"
-      android:layout_marginLeft="5dp"
-      android:layout_marginRight="5dp"/>
+      android:layout_marginTop="40dp"
+      android:layout_marginLeft="40dp"
+      android:layout_marginRight="5dp"
+      android:hint="Type city name"
+      android:textColorHint="@color/quantum_bluegrey500"
+      android:background="@drawable/rounded_edit_text"
+      android:drawableLeft="@drawable/search2"
+      android:textColor="@color/quantum_bluegrey950"/>
   <android.support.v7.widget.RecyclerView
-      android:layout_width="match_parent"
+      android:layout_width="300dp"
       android:layout_height="250dp"
       android:layout_below="@+id/cityname"
       android:layout_marginTop="5dp"
+      android:layout_marginLeft="40dp"
       android:id="@+id/rv1"/>
 
 

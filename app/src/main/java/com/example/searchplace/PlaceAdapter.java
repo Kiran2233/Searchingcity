@@ -29,11 +29,12 @@ public class PlaceAdapter extends RecyclerView.Adapter<PlaceAdapter.MyHolder> {
     private RectangularBounds mBounds;
     public ArrayList<PlaceAutocomplete> mResultList = new ArrayList<>();
     public Context context;
+    private final OnItemClickListener listener;
 
-
-    public PlaceAdapter(RectangularBounds mBounds, Context context) {
+    public PlaceAdapter(RectangularBounds mBounds, Context context,OnItemClickListener listener) {
         this.mBounds = mBounds;
         this.context = context;
+        this.listener = listener;
         placesClient = com.google.android.libraries.places.api.Places.createClient(context);
     }
 
@@ -48,6 +49,7 @@ public class PlaceAdapter extends RecyclerView.Adapter<PlaceAdapter.MyHolder> {
 
     @Override
     public void onBindViewHolder(MyHolder viewHolder, int i) {
+        viewHolder.bind(mResultList.get(i),listener);
         Log.d("ONBINDVIEW", "mResultList.get(i).toString()");
         viewHolder.textView.setText(mResultList.get(i).toString());
 
@@ -67,10 +69,20 @@ public class PlaceAdapter extends RecyclerView.Adapter<PlaceAdapter.MyHolder> {
             Log.d("Myholder", "Entered");
             textView = itemView.findViewById(R.id.address);
         }
+        public void bind(final PlaceAutocomplete item,final OnItemClickListener listener){
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    listener.onItemClick(item,getLayoutPosition());
+                }
+            });
+        }
     }
-
+    public interface OnItemClickListener {
+        void onItemClick(PlaceAutocomplete item,int position);
+    }
     public ArrayList<PlaceAutocomplete> getPredictions(CharSequence constraint) {
-                         ArrayList<PlaceAutocomplete> results = new ArrayList<>();
+                         ArrayList<PlaceAutocomplete> results = new ArrayList<PlaceAutocomplete>();
 
         // Create a new token for the autocomplete session. Pass this to FindAutocompletePredictionsRequest,
         // and once again when the user makes a selection (for example when calling fetchPlace()).
@@ -82,7 +94,7 @@ public class PlaceAdapter extends RecyclerView.Adapter<PlaceAdapter.MyHolder> {
                 // Call either setLocationBias() OR setLocationRestriction().
                 // .setLocationBias(bounds)
                 .setLocationBias(mBounds)
-                .setCountry("au")
+                .setCountry("IN")
                 .setTypeFilter(TypeFilter.CITIES)
                 .setSessionToken(token)
                 .setQuery(constraint.toString());
@@ -99,11 +111,13 @@ public class PlaceAdapter extends RecyclerView.Adapter<PlaceAdapter.MyHolder> {
                     Log.i(TAG, prediction.getPrimaryText(null).toString());
 
                     results.add(new PlaceAutocomplete( prediction.getPrimaryText(null).toString()));
-                           Log.d("array",mResultList.get(0).toString());
+
 
                 }
-                    Log.d("array2",mResultList.get(0).toString());
+                        Log.d("array",results.get(1).toString());
                 mResultList=results;
+                        Log.d("array2",mResultList.get(1).toString());
+                        Log.d("array2size", String.valueOf(mResultList.size()));
             }
         }).addOnFailureListener((exception) -> {
             if (exception instanceof ApiException) {
@@ -132,4 +146,6 @@ public class PlaceAutocomplete {
     public String toString() {
         return name.toString();
     }
-} }
+}
+
+}

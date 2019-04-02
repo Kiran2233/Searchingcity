@@ -1,5 +1,6 @@
 package com.example.searchplace;
 
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -7,6 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.View;
 import android.widget.EditText;
 
 import com.google.android.gms.common.api.ApiException;
@@ -38,9 +40,10 @@ public class MainActivity extends AppCompatActivity {
         editText = findViewById(R.id.cityname);
 
         recyclerView = findViewById(R.id.rv1);
-        recyclerView.setHasFixedSize(true);
-        layoutManager = new LinearLayoutManager(this);
+        layoutManager = new LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false);
         recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setHasFixedSize(true);
+
         if(!Places.isInitialized()){
             Places.initialize(getApplicationContext(),apiKey);
             Log.d("INITIALIZED","JGFKJDSFKDSHFDH");
@@ -49,9 +52,15 @@ public class MainActivity extends AppCompatActivity {
             Log.d("on else","already initialized");
         }
         RectangularBounds bounds = RectangularBounds.newInstance(
-                new LatLng(-33.880490, 151.184363),
-                new LatLng(-33.858754, 151.229596));
-        placeAdapter = new PlaceAdapter(bounds,MainActivity.this);
+                new LatLng(23.63936, 68.14712),
+                new LatLng(28.20453, 97.34466));
+        placeAdapter = new PlaceAdapter(bounds, MainActivity.this, new PlaceAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(PlaceAdapter.PlaceAutocomplete item, int position) {
+                editText.setText(item.toString());
+                recyclerView.setVisibility(View.GONE);
+            }
+        });
         PlacesClient placesClient = Places.createClient(this);
         this.placesClient = placesClient;
         editText.addTextChangedListener(new TextWatcher() {
@@ -66,7 +75,13 @@ public class MainActivity extends AppCompatActivity {
 
                placeAdapter.getPredictions(s);
                 Log.d("ONTEXTCHANGED","JGFKJDSFKDSHFDH");
-                recyclerView.setAdapter(placeAdapter);
+                Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    public void run() {
+                        recyclerView.setAdapter(placeAdapter);
+                    }
+                }, 1000);   //5 seconds
+
                 Log.d("AFTERSETADPTR","JGFKJDSFKDSHFDH");
             }
 
