@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainActivity"
-    android:background="#ADD8E6">
+    android:background="@drawable/gradient">
 <TextView
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
@@ -22,6 +22,7 @@
       android:layout_marginLeft="40dp"
       android:layout_marginRight="5dp"
       android:hint="Type city name"
+      android:paddingLeft="20dp"
       android:textColorHint="@color/quantum_bluegrey500"
       android:background="@drawable/rounded_edit_text"
       android:drawableLeft="@drawable/search2"
